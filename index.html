@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>白草 · 技能交换清单</title>
+<style>
+:root{
+  --green:#1f3d2b; --green2:#2f5a3f; --leaf:#4f7a5a; --gold:#b8963e; --gold2:#d9bd74;
+  --cream:#f6f3ea; --paper:#fffdf7; --ink:#1d2620; --muted:#5f6b62; --line:#e4dccb;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
+  background:var(--cream);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+.serif{font-family:"Songti SC","Noto Serif CJK SC","Noto Serif SC","Source Han Serif SC",serif}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* hero */
+.hero{background:radial-gradient(120% 140% at 85% 0%,#36654a 0%,var(--green) 55%,#16301f 100%);color:#f4efe1;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;
+  border:1px solid rgba(217,189,116,.25);box-shadow:0 0 0 60px rgba(217,189,116,.05),0 0 0 120px rgba(217,189,116,.035)}
+.hero .wrap{padding-top:72px;padding-bottom:64px;position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.28em;color:var(--gold2);font-weight:600}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--gold2)}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:700;letter-spacing:.04em;margin:18px 0 6px;line-height:1.2}
+.hero h1 em{font-style:normal;color:var(--gold2)}
+.hero .sub{font-size:15px;color:#cfd8cc;letter-spacing:.12em}
+.hero .lead{max-width:720px;margin-top:26px;font-size:clamp(17px,2vw,20px);color:#f4efe1;line-height:1.85}
+.hero .lead b{color:var(--gold2);font-weight:600}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px;max-width:900px}
+.fact{border-top:1px solid rgba(217,189,116,.45);padding-top:12px}
+.fact .n{font-size:26px;font-weight:700;color:#fff}
+.fact .n small{font-size:14px;font-weight:500;color:var(--gold2);margin-left:2px}
+.fact .t{font-size:13px;color:#b9c6b8;line-height:1.5}
+.bases{margin-top:34px;display:flex;flex-wrap:wrap;gap:10px}
+.base{font-size:13px;padding:6px 14px;border-radius:999px;border:1px solid rgba(244,239,225,.28);color:#e9e3d2}
+.base b{color:var(--gold2);font-weight:600;margin-right:6px}
+
+/* section */
+section{padding:64px 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:26px}
+.sec-head h2{font-size:clamp(26px,3vw,32px);color:var(--green);letter-spacing:.04em}
+.sec-head h2 span{display:block;font-size:12px;letter-spacing:.3em;color:var(--gold);font-weight:600;margin-bottom:6px;font-family:inherit}
+.sec-head p{color:var(--muted);font-size:14.5px;max-width:520px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px;position:sticky;top:0;z-index:5;padding:12px 0;background:linear-gradient(var(--cream) 80%,rgba(246,243,234,0))}
+.chip{appearance:none;border:1px solid var(--line);background:var(--paper);color:var(--green);font:inherit;font-size:14px;
+  padding:8px 16px;border-radius:999px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.chip i{font-style:normal;font-size:12px;color:var(--muted)}
+.chip:hover{border-color:var(--gold)}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+.chip.on i{color:var(--gold2)}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px 22px 18px;display:flex;flex-direction:column;
+  position:relative;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -18px rgba(31,61,43,.45)}
+.card .cat{font-size:12px;color:var(--gold);letter-spacing:.12em;font-weight:600}
+.card h3{font-size:19px;color:var(--green);margin:6px 0 8px;line-height:1.4}
+.card .give{font-size:14.5px;color:#36423a;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 12px}
+.tag{font-size:12px;padding:3px 10px;border-radius:6px;background:#eef2ea;color:var(--green2)}
+.proof{font-size:13px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;display:flex;gap:8px}
+.proof::before{content:"实例";flex:none;font-size:11px;color:#fff;background:var(--gold);border-radius:4px;padding:1px 6px;height:fit-content;margin-top:2px}
+.card.hide{display:none}
+
+/* want */
+.want{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.want-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.w{padding:20px;border-radius:14px;background:linear-gradient(160deg,#f3efe2,#fbf9f2);border:1px solid var(--line)}
+.w .k{font-size:12px;letter-spacing:.2em;color:var(--gold);font-weight:600}
+.w h4{font-size:17px;color:var(--green);margin:6px 0}
+.w p{font-size:14px;color:var(--muted)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
+.step{background:var(--green);color:#efe9d8;border-radius:16px;padding:26px 24px;position:relative;overflow:hidden}
+.step::before{counter-increment:s;content:"0" counter(s);position:absolute;right:16px;top:6px;font-size:64px;font-weight:700;color:rgba(217,189,116,.18)}
+.step h4{font-size:20px;color:#fff;margin-bottom:8px}
+.step p{font-size:14.5px;color:#cbd6c9}
+.step .arrow{color:var(--gold2);font-size:13px;letter-spacing:.1em;margin-bottom:6px;display:block}
+.rules{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px 22px;font-size:13.5px;color:var(--muted)}
+.rules span::before{content:"·";color:var(--gold);margin-right:6px;font-weight:700}
+
+/* footer */
+footer{background:#16301f;color:#cfd8cc;padding:46px 0}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+footer .big{font-size:22px;color:#fff}
+footer .big b{color:var(--gold2)}
+footer .contact{font-size:16px;padding:12px 20px;border:1px solid rgba(217,189,116,.5);border-radius:12px;color:#f4efe1}
+footer small{display:block;margin-top:6px;font-size:13px;color:#93a493}
+
+
+.about{background:var(--paper);border-bottom:1px solid var(--line)}
+.about-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:start}
+.about p{font-size:15.5px;color:#36423a;margin-bottom:12px}
+.kw{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.kw span{font-size:13px;padding:5px 12px;border-radius:999px;background:#eef2ea;color:var(--green2)}
+.quotes{display:flex;flex-direction:column;gap:14px;padding-top:8px}
+blockquote{font-size:18px;line-height:1.6;color:var(--green);padding:16px 20px;border-left:3px solid var(--gold);background:linear-gradient(90deg,#f3efe2,rgba(243,239,226,0));border-radius:0 12px 12px 0}
+blockquote cite{display:block;font-style:normal;font-size:12.5px;color:var(--muted);margin-top:6px;font-family:"PingFang SC","Noto Sans CJK SC",sans-serif}
+.media{padding:48px 0 8px}
+.media-row{display:flex;gap:14px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory}
+.m{flex:0 0 250px;scroll-snap-align:start;text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--ink);transition:.2s}
+.m:hover{border-color:var(--gold);transform:translateY(-2px)}
+.m b{display:block;font-size:13px;color:var(--gold);letter-spacing:.06em;margin-bottom:6px}
+.m span{font-size:14.5px;color:var(--green);line-height:1.55}
+.m span::after{content:" ↗";color:var(--gold)}
+@media (max-width:860px){.about-grid{grid-template-columns:1fr;gap:20px}}
+@media (max-width:640px){.m{flex-basis:80%}blockquote{font-size:16px}}
+
+.card.personal{background:linear-gradient(165deg,#fbf3e4 0%,#fffaf0 60%);border-color:#e6cf9f}
+.card.personal::before{content:"";position:absolute;left:22px;right:22px;top:0;height:3px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,var(--gold),#c97f5a)}
+.card.personal .cat{color:#a8673f}
+.card.personal h3{font-family:"Songti SC","Noto Serif CJK SC","Noto Serif SC",serif;color:#5a3a22}
+.card.personal .tag{background:#f4e6cc;color:#7a5530}
+.card.personal .proof::before{background:#c97f5a}
+.chip.personal{border-color:#e6cf9f;color:#7a5530;background:#fbf3e4}
+.chip.personal.on{background:#7a5530;border-color:#7a5530;color:#fff}
+@media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}.want-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){
+  .wrap{padding:0 18px}
+  .hero .wrap{padding-top:48px;padding-bottom:44px}
+  .facts{grid-template-columns:repeat(2,1fr);gap:16px 14px}
+  section{padding:46px 0}
+  .grid,.want-grid,.steps{grid-template-columns:1fr}
+  .chips{flex-wrap:nowrap;overflow-x:auto;margin-left:-18px;margin-right:-18px;padding-left:18px;padding-right:18px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:none}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">SKILL EXCHANGE · 原乡映客</div>
+    <h1 class="serif">白草 · <em>技能交换</em>清单</h1>
+    <div class="sub">数字游民社区运营｜共创共居｜订单落地</div>
+    <p class="lead">我是白草，村里人叫我「小草」，数字游民社区运营者。用共创共居把人聚起来，再用<b>「反应堆」式运营</b>，帮一人公司（OPC）接到真场景与订单。下面这些，是我和团队在现场做过、可以拿出来跟你交换的本事。</p>
+    <div class="facts">
+      <div class="fact"><div class="n">2024.8</div><div class="t">漕泾水库村开村，上海首个数字游民国际村</div></div>
+      <div class="fact"><div class="n">450<small>余人</small></div><div class="t">漕泾两年正式入驻创业者</div></div>
+      <div class="fact"><div class="n">3<small>地</small></div><div class="t">张江 · 漕泾 · 黎里统一运营、入驻互通</div></div>
+      <div class="fact"><div class="n">近千<small>人</small></div><div class="t">县域干部 AI 培训，三天三地联动</div></div>
+    </div>
+    <div class="bases">
+      <span class="base"><b>张江</b>背靠科学城，做 AI 出海</span>
+      <span class="base"><b>漕泾</b>离工厂近，离喧闹远</span>
+      <span class="base"><b>黎里</b>推门是古镇，跨省很方便</span>
+    </div>
+  </div>
+</header>
+
+
+<section class="about" id="about">
+  <div class="wrap about-grid">
+    <div>
+      <div class="sec-head" style="margin-bottom:14px"><h2 class="serif"><span>ABOUT</span>关于白草</h2></div>
+      <p>网名白草，村里人都叫她「小草」。上海漕泾数字游民国际村主理人，来自社区运营方原乡映客，负责社区的日常运营、空间管理、社群搭建与市场资源对接。</p>
+      <p>她曾到近 10 个国家考察乡创项目，判断漕泾不该只做文旅，而要做「数字游民创业成长型生活社区」。从 2024 年 8 月首批 12 位村民入住开始，她一边写村长日志，一边把游民的才华接到本地产业上；如今在张江、漕泾、黎里三地联动运营。</p>
+      <div class="kw"><span>共居 × 共学 × 共创</span><span>伴城伴乡</span><span>反应堆式运营</span><span>才华盘点</span><span>前孵化器</span></div>
+    </div>
+    <div class="quotes">
+      <blockquote class="serif">「这一次，是水的故事，是向河流学习的故事。」<cite>初到漕泾时</cite></blockquote>
+      <blockquote class="serif">「社区运营不仅是生活服务，更是要把游民的才华转化为本地的 GDP。」<cite>金山数字游民 OPC 大会圆桌</cite></blockquote>
+      <blockquote class="serif">「人和人的认识只需要一秒。」<cite>村长日志 · 开村第一天</cite></blockquote>
+    </div>
+  </div>
+</section>
+
+<section class="media" id="media">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:18px"><h2 class="serif"><span>IN THE MEDIA</span>媒体与公开内容</h2><p>点开即可查看原文。</p></div>
+    <div class="media-row">
+      <a class="m" href="https://www.jfdaily.com/sgh/detail?id=4058814" target="_blank" rel="noopener"><b>文汇报 · 上观智库声音</b><span>上海首个数字游民国际村探索让乡村成为新一轮数字创业策源地</span></a>
+      <a class="m" href="http://www.why.com.cn/wx/article/2026/04/28/17773469071088725700.html" target="_blank" rel="noopener"><b>青年报 · 2026.4</b><span>既有「金山温度」又有「青春态度」：白草是「生态共建」的缩影</span></a>
+      <a class="m" href="https://k.sina.cn/article_7879922979_1d5ae152301901pyi2.html?from=travel" target="_blank" rel="noopener"><b>新浪新闻</b><span>黎里古镇靠什么让年轻人买单？白草上台分享与黎里的缘分</span></a>
+      <a class="m" href="https://www.xiaoyuzhoufm.com/episode/67dd0b32dd11f9c8c127298e" target="_blank" rel="noopener"><b>小宇宙 · 归处播客</b><span>「数字游民」白草：生命本身就是一场自我感受</span></a>
+      <a class="m" href="https://m.okjike.com/users/996b8781-42a6-4987-84f4-1a661c7f450c" target="_blank" rel="noopener"><b>即刻 · 白草的白</b><span>数字游民村村长日志，记录社区的点点滴滴</span></a>
+      <a class="m" href="https://www.shanghai.gov.cn/nw4411/20240901/2fda134926164bdea330355dd645f5ec.html" target="_blank" rel="noopener"><b>解放日报 · 2024.9</b><span>栖林下居水畔，「只工作不上班」：上海首个数字游民国际村开村</span></a>
+      <a class="m" href="https://news.cctv.com/2024/09/18/ARTIwtV86b9QVjOwlEWoBvcS240918.shtml" target="_blank" rel="noopener"><b>央视网 · 2024.9</b><span>住在农村远程办公，当个「数字游民」怎么样</span></a>
+    </div>
+  </div>
+</section>
+
+<section id="give">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="serif"><span>WHAT I CAN GIVE</span>我能给你什么</h2>
+      <p>十个方向：九个专业方向都配了做过的实例；「个人 · 思想与审美」是我自己热爱、也愿意分享的事。点标签筛选。</p>
+    </div>
+
+    <div class="chips" id="chips">
+      <button class="chip on" data-f="all">全部 <i></i></button>
+      <button class="chip personal" data-f="c10">个人 · 思想与审美 <i></i></button>
+      <button class="chip" data-f="c1">社区运营与空间活化 <i></i></button>
+      <button class="chip" data-f="c9">乡村振兴与造血模式 <i></i></button>
+      <button class="chip" data-f="c2">政府对接与材料写作 <i></i></button>
+      <button class="chip" data-f="c3">AI 培训与实操 <i></i></button>
+      <button class="chip" data-f="c4">企业 AI 落地撮合 <i></i></button>
+      <button class="chip" data-f="c5">活动策划与品牌传播 <i></i></button>
+      <button class="chip" data-f="c6">OPC 孵化与人才网络 <i></i></button>
+      <button class="chip" data-f="c8">表达与分享 <i></i></button>
+      <button class="chip" data-f="c7">资源链接 <i></i></button>
+    </div>
+
+    <div class="grid" id="grid">
+
+
+      <article class="card personal" data-c="c10">
+        <div class="cat">个人 · 思想与审美</div>
+        <h3>哲学探讨</h3>
+        <p class="give">围绕自由、热爱、确定与不确定这些人生命题，慢慢聊、深深聊，聊出属于你自己的答案。</p>
+        <div class="tags"><span class="tag">一对一对谈</span><span class="tag">小型沙龙</span></div>
+        <div class="proof">做客小宇宙播客「归处」，主题是「生命本身就是一场自我感受」。</div>
+      </article>
+
+      <article class="card personal" data-c="c10">
+        <div class="cat">个人 · 思想与审美</div>
+        <h3>诗歌文学创作赏析</h3>
+        <p class="give">一起读诗、写诗、聊好文字：从一首诗的意象到一段文字的节奏，也帮你把日常写成有诗意的记录。</p>
+        <div class="tags"><span class="tag">共读会</span><span class="tag">创作交流</span><span class="tag">作品点评</span></div>
+        <div class="proof">在即刻「白草的白」以短诗般的文字写村长日志：「兴之所及，兴之所至。自然地歌唱，自然地路演。」</div>
+      </article>
+
+      <article class="card personal" data-c="c10">
+        <div class="cat">个人 · 思想与审美</div>
+        <h3>审美鉴赏</h3>
+        <p class="give">从空间、影像到生活器物，一起看什么是好看、为什么好看，养成自己的审美判断。</p>
+        <div class="tags"><span class="tag">一对一交流</span><span class="tag">同游观展</span></div>
+      </article>
+
+      <article class="card personal" data-c="c10">
+        <div class="cat">个人 · 思想与审美</div>
+        <h3>衣品审美提升</h3>
+        <p class="give">根据你的气质、身形和场合，给出穿搭方向与搭配建议，穿出舒服又有辨识度的自己。</p>
+        <div class="tags"><span class="tag">搭配建议</span><span class="tag">一对一咨询</span></div>
+      </article>
+
+      <article class="card personal" data-c="c10">
+        <div class="cat">个人 · 思想与审美</div>
+        <h3>顶层思维对话</h3>
+        <p class="give">跳出眼前的琐事，从定位、结构到长期方向，一起把一件事、一段人生想清楚。</p>
+        <div class="tags"><span class="tag">一对一对谈</span><span class="tag">思维共创</span></div>
+      </article>
+
+      <!-- c1 社区运营 -->
+      <article class="card" data-c="c1">
+        <div class="cat">社区运营与空间活化</div>
+        <h3>数字游民社区从 0 到 1</h3>
+        <p class="give">选址判断、首批村民招募与筛选、住宿与工位配置、入驻流程，把一个乡村空间变成有人住、有人干活的社区。</p>
+        <div class="tags"><span class="tag">一对一咨询</span><span class="tag">实地考察</span><span class="tag">陪跑</span></div>
+        <div class="proof">2024 年 8 月漕泾水库村开村，首批 12 人；两年正式入驻创业者 450 余人，在村里注册 40 家企业。</div>
+      </article>
+
+      <article class="card" data-c="c1">
+        <div class="cat">社区运营与空间活化</div>
+        <h3>共居氛围与日常运营</h3>
+        <p class="give">怎么让新人第一周就留下来：社区晚餐、灵感圈、共学、夜话这些日常机制，以及管家怎么接住每一位住客。</p>
+        <div class="tags"><span class="tag">工作坊</span><span class="tag">SOP 模板</span></div>
+        <div class="proof">漕泾、张江、黎里三地常态开展社区晚餐、灵感圈、英语共学、AI 沙龙、社区夜话等活动。</div>
+      </article>
+
+      <article class="card" data-c="c1">
+        <div class="cat">社区运营与空间活化</div>
+        <h3>多基地联动与入驻互通</h3>
+        <p class="give">一套口径管多个社区：各基地定位差异化、入驻规则互认、跨基地短住与订单互推。</p>
+        <div class="tags"><span class="tag">一对一咨询</span><span class="tag">规则模板</span></div>
+        <div class="proof">张江、漕泾、黎里由原乡映客统一运营：在任一基地入驻过，去另外两地免初审，可参加对方公开活动。</div>
+      </article>
+
+      <article class="card" data-c="c1">
+        <div class="cat">社区运营与空间活化</div>
+        <h3>新社区运营架构建议</h3>
+        <p class="give">给正在筹建社区或空间的伙伴：从定位、架构、运营机制到垂类落地，按一条主线讲清社区怎么启动、怎么转起来。</p>
+        <div class="tags"><span class="tag">座谈分享</span><span class="tag">一对一咨询</span></div>
+        <div class="proof">受邀参加复兴岛开源城市座谈，从张江社区实践出发分享社区聚人与氛围构建的方法。</div>
+      </article>
+
+
+      <article class="card" data-c="c1">
+        <div class="cat">社区运营与空间活化</div>
+        <h3>入驻筛选与社群画像</h3>
+        <p class="give">想要什么样的社区，就先定什么样的筛选：看职业经历、能力特长、共建意愿，找到一群能一起做事的成熟游民。</p>
+        <div class="tags"><span class="tag">一对一咨询</span><span class="tag">筛选模板</span></div>
+        <div class="proof">漕泾面向职业型、创业型人群，从职业经历、能力特长、乡创共建意愿、是否愿意与老人共居等维度筛选入驻者。</div>
+      </article>
+
+      <article class="card" data-c="c9">
+        <div class="cat">乡村振兴与造血模式</div>
+        <h3>城乡共居与闲置农宅活化</h3>
+        <p class="give">把村民家的闲置房间变成游民住处，让新村民和老村民真正住到一起、处到一起。</p>
+        <div class="tags"><span class="tag">实地考察</span><span class="tag">一对一咨询</span></div>
+        <div class="proof">漕泾开村时首批游民就住进村民闲置农宅；村民会邀请游民一起包粽子、做月饼。</div>
+      </article>
+
+      <article class="card" data-c="c9">
+        <div class="cat">乡村振兴与造血模式</div>
+        <h3>社区自我造血模式</h3>
+        <p class="give">不只靠空间收租：把社区里超级个体的本事打包成课程、服务和订单，让社区有持续收入。</p>
+        <div class="tags"><span class="tag">商业模式共创</span><span class="tag">一对一咨询</span></div>
+        <div class="proof">推出由编剧、天使投资人、芳香疗愈师等游民主讲的讲座系列，线上线下同步，企事业单位也成为客户。</div>
+      </article>
+
+      <article class="card" data-c="c9">
+        <div class="cat">乡村振兴与造血模式</div>
+        <h3>政、企、运、技四方协同</h3>
+        <p class="give">政府搭台牵线、企业出场景、运营方拆项目、OPC 出方案，一套让各方都愿意坐上桌的协作打法。</p>
+        <div class="tags"><span class="tag">模式分享</span><span class="tag">陪跑</span></div>
+        <div class="proof">金山数字游民 OPC 大会圆桌上，与镇里、企业、技术专家同台讲清这套「前孵化器」打法。</div>
+      </article>
+
+      <!-- c2 政府 -->
+      <article class="card" data-c="c2">
+        <div class="cat">政府对接与材料写作</div>
+        <h3>OPC 社区申报材料</h3>
+        <p class="give">把社区的空间、服务包、入驻 OPC 和产业方向，写成符合申报要求的材料，口径与证据一一对齐。</p>
+        <div class="tags"><span class="tag">一对一咨询</span><span class="tag">材料陪跑</span></div>
+        <div class="proof">张江、漕泾两地的市级 OPC 社区申报材料已完成并提交市经信委。</div>
+      </article>
+
+      <article class="card" data-c="c2">
+        <div class="cat">政府对接与材料写作</div>
+        <h3>政府汇报与公文写作</h3>
+        <p class="give">工作汇报、发展需求与建议、活动方案的政府版，按公文格式与官方文风成稿。</p>
+        <div class="tags"><span class="tag">模板</span><span class="tag">改稿陪跑</span></div>
+        <div class="proof">完成漕泾 OPC 赋能在地企业情况汇报、黎里基地运营发展需求与建议、张江 OPC 森林节政府汇报版等材料。</div>
+      </article>
+
+      <article class="card" data-c="c2">
+        <div class="cat">政府对接与材料写作</div>
+        <h3>政务 AI 场景梳理</h3>
+        <p class="give">走访或收集各部门需求，整理成一份「哪个部门、哪件事、AI 能帮哪一步」的场景清单，方便后续立项。</p>
+        <div class="tags"><span class="tag">调研</span><span class="tag">场景清单</span></div>
+        <div class="proof">为长三角一处高新区汇总十余家单位的 AI 政务场景需求，并形成对外版需求汇总。</div>
+      </article>
+
+      <!-- c3 培训 -->
+      <article class="card" data-c="c3">
+        <div class="cat">AI 培训与实操</div>
+        <h3>政企干部 AI 赋能培训</h3>
+        <p class="give">分层设计课程：普及、提升、安全合规三层，国产大模型实操、智能体与政务应用、AI 工作流。</p>
+        <div class="tags"><span class="tag">集中培训</span><span class="tag">课程方案</span></div>
+        <div class="proof">吉林辉南县近千人参训，三天三地联动授课，覆盖干部、业务骨干、职中师生与企业负责人。</div>
+      </article>
+
+      <article class="card" data-c="c3">
+        <div class="cat">AI 培训与实操</div>
+        <h3>订单学院 · 企业真题工作坊</h3>
+        <p class="give">用真实企业题（脱敏）当教材，把老板原话拆成需求卡、边界和验收口径，帮 OPC 补齐商务与业务理解。</p>
+        <div class="tags"><span class="tag">单日实操</span><span class="tag">三日工作坊</span><span class="tag">项目陪跑</span></div>
+        <div class="proof">已形成单日脱敏案例实操、三日订单实战工作坊、企业项目陪跑、订单黑客松四类课程。</div>
+      </article>
+
+      <article class="card" data-c="c3">
+        <div class="cat">AI 培训与实操</div>
+        <h3>在地商户与文旅 AI 实操课</h3>
+        <p class="give">面向古镇商户、文旅场馆：当场用 AI 做营销文案、店务小工具、宣传内容，学完就能用。</p>
+        <div class="tags"><span class="tag">现场实操</span><span class="tag">定制课</span></div>
+        <div class="proof">9 月 22 日黎里驿站在地商户 AI 实操培训，商户当场做出营销文案和店务工具。</div>
+      </article>
+
+
+      <article class="card" data-c="c3">
+        <div class="cat">AI 培训与实操</div>
+        <h3>多智能体协作工作台</h3>
+        <p class="give">用多个 AI 助手按「军师、宣传、联络、财务、项目」分工，日常写材料、做调研、出日结，一个人带出一支队伍的产能。</p>
+        <div class="tags"><span class="tag">实操演示</span><span class="tag">经验分享</span></div>
+        <div class="proof">自己的日常工作就跑在一套多 AI 助手协作的工作台上，政府材料、方案、活动稿都由它们协同起草、人审定稿。</div>
+      </article>
+
+      <!-- c4 AI 落地 -->
+      <article class="card" data-c="c4">
+        <div class="cat">企业 AI 落地撮合</div>
+        <h3>企业 AI 需求诊断</h3>
+        <p class="give">用问卷和座谈定位一件具体业务、牵涉哪些部门、卡在哪个交接，找到最值得先做的第一刀。</p>
+        <div class="tags"><span class="tag">诊断问卷</span><span class="tag">座谈</span></div>
+        <div class="proof">为金山园区企业设计「AI 应用场景小问卷」，并整理金山企业 AI 应用能力地图。</div>
+      </article>
+
+      <article class="card" data-c="c4">
+        <div class="cat">企业 AI 落地撮合</div>
+        <h3>智能体项目匹配与质控</h3>
+        <p class="give">从社区人才池里匹配对口的 OPC 小队，小切口 MVP 先行，社区负责供给组织与质量把控。</p>
+        <div class="tags"><span class="tag">需求对接</span><span class="tag">项目陪跑</span></div>
+        <div class="proof">强华实业「数字大脑」：技术、商务、运营突击队用大模型＋RAG 搭出工艺知识库检索 DEMO 并完成验证。</div>
+      </article>
+
+      <article class="card" data-c="c4">
+        <div class="cat">企业 AI 落地撮合</div>
+        <h3>企业服务案例库</h3>
+        <p class="give">把散落的交付整理成按行业、按场景可对照的案例库，企业一看就知道「同行做过什么」。</p>
+        <div class="tags"><span class="tag">案例模板</span><span class="tag">介绍材料</span></div>
+        <div class="proof">漕泾企业服务介绍收录 26 个企业交付案例，覆盖 24 家已授权展示的客户，梳理为八大服务方向。</div>
+      </article>
+
+      <!-- c5 活动 -->
+      <article class="card" data-c="c5">
+        <div class="cat">活动策划与品牌传播</div>
+        <h3>订单黑客松</h3>
+        <p class="give">企业出真题、OPC 现场解题、企业一线人员当场验收，把比赛变成可成交的任务包。</p>
+        <div class="tags"><span class="tag">活动方案</span><span class="tag">执行陪跑</span></div>
+        <div class="proof">漕泾社区订单黑客松上，OPC 用园区企业真题做方案并获一等奖；张江黑客松已迭代「三天驻场上岗」版流程。</div>
+      </article>
+
+      <article class="card" data-c="c5">
+        <div class="cat">活动策划与品牌传播</div>
+        <h3>走进企业对接会</h3>
+        <p class="give">带一群 AI 创业者走进工厂展厅与会议室，围绕企业真实需求座谈，现场对接。</p>
+        <div class="tags"><span class="tag">对接活动</span><span class="tag">组织执行</span></div>
+        <div class="proof">今年 5 月 17 位 AI 创业者走访当地一家美妆制造企业，两位有海外经验的创业者当场对接下业务。</div>
+      </article>
+
+      <article class="card" data-c="c5">
+        <div class="cat">活动策划与品牌传播</div>
+        <h3>影响力活动与路演</h3>
+        <p class="give">从主题、流程到政府版方案，策划社区标志性活动、创业路演与 Demo Day。</p>
+        <div class="tags"><span class="tag">策划方案</span><span class="tag">执行陪跑</span></div>
+        <div class="proof">策划张江「模力全开 · OPC 森林节」；漕泾每月举办水窠里 AI Startup Pitch。</div>
+      </article>
+
+      <article class="card" data-c="c5">
+        <div class="cat">活动策划与品牌传播</div>
+        <h3>社区品牌与个人 IP</h3>
+        <p class="give">社区故事怎么讲、媒体怎么对接、运营者个人 IP 怎么做（现场日志＋清醒观点双声部）。</p>
+        <div class="tags"><span class="tag">一对一咨询</span><span class="tag">内容共创</span></div>
+        <div class="proof">漕泾开村即登解放日报头版，并获央视、中国日报、澎湃、文汇报等报道；运营小红书「游民村村长白草」。</div>
+      </article>
+
+
+      <article class="card" data-c="c5">
+        <div class="cat">活动策划与品牌传播</div>
+        <h3>开幕与官宣仪式导演</h3>
+        <p class="give">从剧本、嘉宾分享到现场节奏，把一场开幕仪式做成让人记得住的故事。</p>
+        <div class="tags"><span class="tag">策划方案</span><span class="tag">现场执行</span></div>
+        <div class="proof">漕泾开村官宣仪式：一周打磨剧本《君子不器，致敬数字游民时代的自己》，五位游民代表讲述人生故事。</div>
+      </article>
+
+      <!-- c6 OPC -->
+      <article class="card" data-c="c6">
+        <div class="cat">OPC 孵化与人才网络</div>
+        <h3>OPC 能力图谱与人才盘点</h3>
+        <p class="give">把社区里每个人会什么、做过什么，整理成企业能「点单」的能力图谱，供需一眼对上。</p>
+        <div class="tags"><span class="tag">盘点方法</span><span class="tag">图谱模板</span></div>
+        <div class="proof">完成金山 OPC 能力图谱（企业点单版三折页）与人才库精选 50 例。</div>
+      </article>
+
+      <article class="card" data-c="c6">
+        <div class="cat">OPC 孵化与人才网络</div>
+        <h3>社区撮合机制设计</h3>
+        <p class="give">社区帮 OPC 接单后，首单、续单、分包怎么约定、台账怎么交，用一份协议写清楚，合作不伤感情。</p>
+        <div class="tags"><span class="tag">协议模板</span><span class="tag">一对一咨询</span></div>
+        <div class="proof">《OPC 社区生态合作协议》已定稿，覆盖漕泾、张江、苏州黎里整个社区生态。</div>
+      </article>
+
+      <article class="card" data-c="c6">
+        <div class="cat">OPC 孵化与人才网络</div>
+        <h3>从「来生活」到「接订单」</h3>
+        <p class="give">新人入驻后的第一个月怎么过：才华盘点、找到同路人组队、接到第一道产业题。</p>
+        <div class="tags"><span class="tag">陪跑</span><span class="tag">清单</span></div>
+        <div class="proof">漕泾 OPC 成员影一在村里做出企业知识库 AI 应用，已服务水星家纺与漕泾镇政府。</div>
+      </article>
+
+
+      <article class="card" data-c="c6">
+        <div class="cat">OPC 孵化与人才网络</div>
+        <h3>才华盘点与突击队组队</h3>
+        <p class="give">每位入驻者都做才华盘点、打标签；企业需求一来，就能快速拼出「技术＋商务＋运营」小队。</p>
+        <div class="tags"><span class="tag">方法分享</span><span class="tag">盘点模板</span></div>
+        <div class="proof">为金山制造业需求从社区抽调 AI 架构、大模型与商务伙伴组成突击队，技术专家入驻一周即匹配上本地企业项目。</div>
+      </article>
+
+      <article class="card" data-c="c8">
+        <div class="cat">表达与分享</div>
+        <h3>论坛圆桌与公开演讲</h3>
+        <p class="give">讲社区、讲 OPC、讲乡村科创：既有温度的现场故事，也有「反应堆」这样硬核的判断。</p>
+        <div class="tags"><span class="tag">演讲</span><span class="tag">圆桌嘉宾</span><span class="tag">主持</span></div>
+        <div class="proof">在金山数字游民 OPC 大会圆桌提出「社区即人才库，运营方即反应堆」；在黎里梨花节上台分享与古镇的缘分。</div>
+      </article>
+
+      <article class="card" data-c="c8">
+        <div class="cat">表达与分享</div>
+        <h3>播客与访谈：数字游民生活方式</h3>
+        <p class="give">谁适合成为数字游民、游民生活真实是什么样，讲给想「换个活法」的人听。</p>
+        <div class="tags"><span class="tag">播客嘉宾</span><span class="tag">访谈</span><span class="tag">分享会</span></div>
+        <div class="proof">作为嘉宾做客小宇宙播客「归处」，谈数字游民的生活与选择。</div>
+      </article>
+
+      <article class="card" data-c="c8">
+        <div class="cat">表达与分享</div>
+        <h3>社区叙事与日志写作</h3>
+        <p class="give">把社区里每天发生的相遇写下来：村长日志、人物小传，让外面的人也感受到社区的温度。</p>
+        <div class="tags"><span class="tag">写作工作坊</span><span class="tag">内容共创</span></div>
+        <div class="proof">在即刻「白草的白」连载数字游民村运营日志，从首批 12 位村民入住写起。</div>
+      </article>
+
+      <!-- c7 资源 -->
+      <article class="card" data-c="c7">
+        <div class="cat">资源链接</div>
+        <h3>政企与大企业合作对接</h3>
+        <p class="give">把社区 OPC 带到国企、园区面前，围绕具体课题面对面交流，从信任走向业务共创。</p>
+        <div class="tags"><span class="tag">引荐</span><span class="tag">对接会</span></div>
+        <div class="proof">组织东航资产数字化 AI 合作交流会，多位 OPC 围绕特种车辆预测性维修等课题现场对接。</div>
+      </article>
+
+      <article class="card" data-c="c7">
+        <div class="cat">资源链接</div>
+        <h3>长三角三地落脚点</h3>
+        <p class="give">想在上海或苏州住一段、找工位、注册公司，按你的方向推荐最合适的一个基地。</p>
+        <div class="tags"><span class="tag">引荐</span><span class="tag">入驻对接</span></div>
+        <div class="proof">漕泾提供工商、银行、税务一站式代办；张江有镇产促中心协助企业注册与政务服务。</div>
+      </article>
+
+      <article class="card" data-c="c7">
+        <div class="cat">资源链接</div>
+        <h3>对口 OPC 引荐</h3>
+        <p class="give">需要做出海 GEO、电商素材、AIGC 宣传片、工业产线 AI？我帮你在人才池里找到做过的人。</p>
+        <div class="tags"><span class="tag">引荐</span><span class="tag">需求对接</span></div>
+        <div class="proof">社区人才池覆盖智能体、RAG 知识库、工业产线 AI、AIGC、电商自动化、出海增长等方向。</div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="want" id="want">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="serif"><span>WHAT I'M LOOKING FOR</span>我想换什么</h2>
+      <p>不一定要等价，愿意一起把事做成就好。</p>
+    </div>
+    <div class="want-grid">
+      <div class="w"><div class="k">01</div><h4>真实的企业题</h4><p>你身边企业的一个具体业务痛点，让社区 OPC 有真场景可练、可交付。</p></div>
+      <div class="w"><div class="k">02</div><h4>愿意共建的人</h4><p>想来住一段、带着技能参与共创共学的超级个体与数字游民。</p></div>
+      <div class="w"><div class="k">03</div><h4>场景与空间伙伴</h4><p>园区、乡镇、古镇、场馆，愿意一起试一个新社区或新场景的合作方。</p></div>
+      <div class="w"><div class="k">04</div><h4>内容与传播同路人</h4><p>一起讲好一人公司与乡村科创故事的媒体、创作者与品牌。</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="serif"><span>HOW WE EXCHANGE</span>交换方式</h2>
+      <p>从一件具体的小事开始，先试一次，再谈长期。</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="arrow">STEP 1</span><h4>约聊</h4><p>加微信说一句：你想要清单里的哪一项，手上有什么可以换。线上聊或来社区坐坐都行。</p></div>
+      <div class="step"><span class="arrow">STEP 2</span><h4>对齐需求</h4><p>把双方要什么、做到什么程度、多久完成写成一页纸，边界清楚再开始。</p></div>
+      <div class="step"><span class="arrow">STEP 3</span><h4>互换交付</h4><p>各自按约定交付，结束后一起复盘；合得来，再换下一件事。</p></div>
+    </div>
+    <div class="rules">
+      <span>先小步验证，再深度共创</span>
+      <span>不承诺做不到的结果</span>
+      <span>涉及客户与案例，按授权范围对外</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="big serif">来社区走走，<b>一起把事做成。</b></div>
+      <small>白草 · 原乡映客｜张江 · 漕泾 · 黎里</small>
+    </div>
+    <div class="contact">联系方式：白草（微信）</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var chips=document.querySelectorAll('.chip'),cards=document.querySelectorAll('.card');
+  chips.forEach(function(ch){
+    var f=ch.dataset.f,n=0;
+    cards.forEach(function(c){if(f==='all'||c.dataset.c===f)n++;});
+    ch.querySelector('i').textContent=n;
+    ch.addEventListener('click',function(){
+      chips.forEach(function(x){x.classList.remove('on')});ch.classList.add('on');
+      cards.forEach(function(c){c.classList.toggle('hide',!(f==='all'||c.dataset.c===f));});
+    });
+  });
+})();
+</script>
+</body>
+</html>
